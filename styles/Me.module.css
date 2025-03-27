@@ -1,0 +1,79 @@
+.content {
+  display: grid;
+  width: 100%;
+  margin-left: 300px;
+  padding: 16px;
+  min-height: 100%;
+}
+.navbar2 {
+  padding: 8px 8px 8px 2px;
+  display: none;
+  border-bottom: 2px solid #406343;
+}
+.mepage {
+  min-height: 100%;
+}
+.information {
+  display: flex;
+}
+.hornav {
+  width: 300px;
+  background-color: rgb(255, 255, 255);
+  position: fixed;
+  height: calc(100% - 72px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.imgUploadBox {
+  height: 214px;
+  border-radius: 8px;
+}
+.image {
+  border-radius: 8px;
+  border: 2px solid green;
+}
+.tabletHornav {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 72px;
+  display: flex;
+  left: 0;
+  height: 100vh;
+  z-index: 10;
+  display: none;
+}
+.fixed {
+  width: 256px;
+  background-color: #fff;
+  position: fixed;
+  color: #111f4d;
+  height: calc(100vh - 72px);
+  overflow-y: auto;
+}
+@media screen and (max-width: 900px) {
+  .hornav {
+    display: none;
+  }
+  .navbar2 {
+    display: flex;
+  }
+  .tabletHornav {
+    display: flex;
+  }
+  .content {
+    padding: 8px;
+    margin-left: 0;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .information {
+    flex-direction: column;
+  }
+  .imgUploadBox {
+    width: 100%;
+    height: auto;
+  }
+}

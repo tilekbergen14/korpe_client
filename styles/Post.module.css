@@ -1,0 +1,139 @@
+.postpage {
+  padding: 0;
+  height: max-content;
+  position: relative;
+  height: 100%;
+}
+.waveBox {
+  width: 100%;
+  position: relative;
+  aspect-ratio: 1920 / 446;
+}
+.section {
+  position: absolute;
+  width: 100%;
+  top: 30%;
+}
+.twoGrid {
+  display: grid;
+  grid-template-columns: 1fr 0fr;
+  padding: 0 20px;
+}
+.post {
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+  overflow-x: hidden;
+  padding: 8px;
+}
+.header {
+  display: grid;
+  grid-template-columns: 0.6fr 0.4fr;
+}
+.postInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.title {
+  padding: 0 4px;
+  color: #111f4d;
+  font-size: 40px;
+}
+.postImage {
+  place-self: center;
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  min-width: 100%;
+  background-color: #eeeeee;
+}
+.image {
+  border-radius: 8px;
+  object-fit: cover;
+  border: 2px solid #fff !important;
+}
+.smallText {
+  font-size: 15px;
+  margin: 0;
+}
+.secondary {
+  color: #757575;
+  font-weight: 800;
+  padding: 0 4px;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+}
+.likes {
+  display: flex;
+  padding: 0 4px;
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  padding: 4px 8px;
+}
+.body {
+  max-width: 100%;
+  padding: 0 4px;
+  position: relative;
+  margin-bottom: 48px;
+}
+/**********postbox*******/
+.readmore {
+  margin-bottom: 24px;
+}
+.morePosts {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 24px;
+}
+
+@media screen and (max-width: 1100px) {
+  .twoGrid {
+    grid-template-columns: 1fr;
+  }
+  .morePosts {
+    grid-template-columns: 1fr 1fr;
+  }
+  .section {
+    top: 24px;
+  }
+  .twoGrid {
+    padding: 0;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .postpage {
+    padding: 0 !important;
+  }
+  .section {
+    top: 24px;
+  }
+  .title {
+    font-size: 24px;
+  }
+  .header {
+    grid-template-columns: 1fr;
+  }
+  .postImage {
+    aspect-ratio: 16 / 9;
+  }
+  .waveBox {
+    display: none;
+  }
+  .tags {
+    margin-bottom: 16px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .morePosts {
+    grid-template-columns: 1fr;
+  }
+}

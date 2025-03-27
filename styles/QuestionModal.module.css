@@ -1,0 +1,32 @@
+.addquestion {
+  position: fixed;
+  z-index: 4;
+  background-color: rgba(0, 0, 0, 0.4);
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: auto;
+  display: grid;
+  place-items: center;
+}
+.questionModal {
+  background-color: #fff;
+  padding: 16px;
+  margin: 16px;
+  width: 90%;
+  max-width: 700px;
+  border-radius: 8px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+.info {
+  margin-top: 0;
+  font-size: 16px;
+  color: #757575;
+}
+.editor {
+  width: 100%;
+  margin: 16px 0;
+}

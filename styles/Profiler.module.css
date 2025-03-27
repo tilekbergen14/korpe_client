@@ -1,0 +1,44 @@
+.profiler {
+  position: fixed;
+  top: 100px;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 3;
+  width: 100%;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+}
+
+.modal {
+  padding: 16px;
+  background-color: #fff;
+  max-height: 500px;
+  border-radius: 8px;
+  max-width: 600px;
+  z-index: 4;
+}
+
+.gridBox {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 8px;
+  max-height: 300px;
+}
+.closer {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  left: 0;
+}
+.choosen {
+  border: 4px solid green;
+}
+@media screen and (max-width: 900px) {
+  .gridBox {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
