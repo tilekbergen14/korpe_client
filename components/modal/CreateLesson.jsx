@@ -6,7 +6,7 @@ import Snackbar from "../Snackbar";
 import { useRouter } from "next/router";
 import CloseIcon from "@mui/icons-material/Close";
 import ImageUpload from "../ImageUpload";
-import Link from "next/Link";
+import Link from "next/link";
 
 export default function CreateLesson({
   setCreateLesson,

@@ -8,7 +8,7 @@ import { TextField, MenuItem, CircularProgress } from "@mui/material";
 import axios from "axios";
 import Question from "../../components/Question";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import Link from "next/Link";
+import Link from "next/link";
 import Card from "../../components/Card";
 
 export default function SearchResults(props) {

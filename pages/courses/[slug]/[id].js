@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "../../../styles/Admin.module.css";
 import { useRouter } from "next/router";
 import MenuIcon from "@mui/icons-material/Menu";
-import Link from "next/Link";
+import Link from "next/link";
 import options from "../../../functions/editorOptions";
 import { stateToHTML } from "draft-js-export-html";
 import {

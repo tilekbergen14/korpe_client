@@ -6,7 +6,7 @@ import { Button, CircularProgress } from "@mui/material";
 import CreateLesson from "../modal/CreateLesson";
 import Snackbar from "../../components/Snackbar";
 import axios from "axios";
-import Link from "next/Link";
+import Link from "next/link";
 
 export default function Lessons() {
   const [selected, setSelected] = useState("All");

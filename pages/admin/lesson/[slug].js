@@ -15,7 +15,7 @@ import {
   Divider,
   InputAdornment,
 } from "@mui/material";
-import Link from "next/Link";
+import Link from "next/link";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { TextField, Button } from "@mui/material";
 import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
