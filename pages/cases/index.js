@@ -93,7 +93,7 @@ export default function Index(props) {
           width="90%"
         >
           <Typography variant="h4" gutterBottom>
-            Тауарлар тізімі
+            Қаптар тізімі
           </Typography>
           {isAdmin && (
             <Button
@@ -164,7 +164,7 @@ export default function Index(props) {
         alignItems="center"
       >
         <Typography variant="h4" gutterBottom>
-          {selectedIndex === null ? "Мата қосу" : "Мата ақпараттарын өзгерту"}
+          {selectedIndex === null ? "Қап қосу" : "Қап ақпараттарын өзгерту"}
         </Typography>
         <form onSubmit={handleSubmit} style={{ width: "100%" }}>
           <TextField

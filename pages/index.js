@@ -12,7 +12,7 @@ import Link from "next/link";
 export default function Home({ posts, questions }) {
   const [list, setList] = useState([
     {
-      name: "Материалдар",
+      name: "Шикізат",
       link: "/materials",
     },
     {

@@ -211,13 +211,7 @@ export default function Index(props) {
               required
             />
           )}
-          <Button
-            type="submit"
-            variant="contained"
-            color="success"
-            fullWidth
-            disabled={!selectedIndex}
-          >
+          <Button type="submit" variant="contained" color="success" fullWidth>
             {selectedIndex === null ? "Қосу" : "Өзгерту"}
           </Button>
         </form>

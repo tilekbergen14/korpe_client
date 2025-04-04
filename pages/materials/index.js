@@ -93,7 +93,7 @@ export default function Index(props) {
           width="90%"
         >
           <Typography variant="h4" gutterBottom>
-            Тауарлар тізімі
+            Шикізаттар тізімі
           </Typography>
           {isAdmin && (
             <Button
@@ -121,7 +121,7 @@ export default function Index(props) {
                   <strong>Бағасы (₸)</strong>
                 </TableCell>
                 <TableCell>
-                  <strong>Барлығы (М)</strong>
+                  <strong>Барлығы (кг)</strong>
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -139,7 +139,7 @@ export default function Index(props) {
                   >
                     <TableCell>{item.name}</TableCell>
                     <TableCell>{item.price}₸</TableCell>
-                    <TableCell>{item.total}м</TableCell>
+                    <TableCell>{item.total}кг</TableCell>
                   </TableRow>
                 ))
               ) : (
