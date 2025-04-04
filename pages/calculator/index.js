@@ -157,14 +157,12 @@ export default function CalculatorPage(props) {
             setSelected={setSelectedItem}
           />
           <TextField
-            type="number"
+            type="text"
             label="Метр"
             variant="outlined"
             value={lenght}
             sx={{ mt: 5, ml: 1, width: 100 }}
-            onChange={(e) =>
-              setLenght(Math.max(1, parseInt(e.target.value, 10) || 1))
-            }
+            onChange={(e) => setLenght(e.target.value)}
           />
         </div>
         <Dropdown
@@ -186,9 +184,7 @@ export default function CalculatorPage(props) {
             variant="outlined"
             value={weight}
             sx={{ mt: 5, ml: 1, width: 100 }}
-            onChange={(e) =>
-              setWeight(Math.max(1, parseInt(e.target.value, 10) || 1))
-            }
+            onChange={(e) => setWeight(e.target.value)}
           />
         </div>
         <div className="flex">
