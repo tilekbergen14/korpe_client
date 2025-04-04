@@ -307,8 +307,17 @@ export default function SalesList() {
             </Card>
           )}
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseModal} color="primary">
+        <DialogActions
+          style={{ display: "flex", justifyContent: "space-between" }}
+        >
+          <Button variant="contained" color="success">
+            Басып шығару
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleCloseModal}
+            color="primary"
+          >
             Жабу
           </Button>
         </DialogActions>
