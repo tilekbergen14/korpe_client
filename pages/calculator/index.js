@@ -39,6 +39,7 @@ export default function CalculatorPage(props) {
   const [total, setTotal] = useState(0);
   const [allTotal, setAllTotal] = useState(0);
   const [client, setClient] = useState("");
+  const [received, setReceived] = useState(0);
   const [selectedOrders, setSelectedOrders] = useState([]); // Stores selected orders
   const [canSend, setCanSend] = useState(false);
 
@@ -102,7 +103,7 @@ export default function CalculatorPage(props) {
     try {
       const response = await axios.post(
         `${process.env.server}/sale`,
-        { orders: selectedOrders, client, total: allTotal },
+        { orders: selectedOrders, client, total: allTotal, received },
         {
           headers: {
             authorization: "Bearer " + user.token,
@@ -224,7 +225,7 @@ export default function CalculatorPage(props) {
             value={client}
             sx={{ mt: 5 }}
             onChange={(e) => {
-              e.target.value !== "" ? setCanSend(true) : setCanSend(false);
+              e.target.value !== "" && received !== 0 && received !== "" ? setCanSend(true) : setCanSend(false);
               setClient(e.target.value);
             }}
           />
@@ -319,9 +320,22 @@ export default function CalculatorPage(props) {
                     </TableBody>
                   ))}
                 </Table>
-                <Typography variant="h6" sx={{ m: 2 }}>
-                  Жиынтық баға: {allTotal}₸
-                </Typography>
+                <div style={{display: "flex", justifyContent: "space-between", marginTop: "8px"}}>
+                  <Typography variant="h6" sx={{ m: 2 }}>
+                    Жиынтық баға: {allTotal}₸
+                  </Typography>
+                  <TextField
+                    label="Қабылданған сумма"
+                    variant="outlined"
+                    value={received}
+                    onChange={(e) => {
+                      e.target.value !== "" && client !== ""
+                        ? setCanSend(true)
+                        : setCanSend(false);
+                      setReceived(e.target.value);
+                    }}
+                  />
+                </div>
               </TableContainer>
             )}
             {selectedOrders.length > 0 && (

@@ -98,7 +98,7 @@ export default function SalesList() {
 
   useEffect(() => {
     const newSum = filteredSales.reduce((total, sale) => {
-      return total + calculateTotal([sale.total]);
+      return total + calculateTotal([sale.received]);
     }, 0);
     setSum(newSum);
   }, [filteredSales]);
@@ -151,6 +151,12 @@ export default function SalesList() {
                 <TableCell>
                   <strong>Баға</strong>
                 </TableCell>
+                <TableCell>
+                  <strong>Қабылданған сумма</strong>
+                </TableCell>
+                <TableCell>
+                  <strong>Қалған сумма</strong>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -160,6 +166,8 @@ export default function SalesList() {
                     <TableCell>{sale.name}</TableCell>
                     <TableCell>{formatDate(sale.createdAt)}</TableCell>
                     <TableCell>{sale.total}₸</TableCell>
+                    <TableCell>{sale.received ? sale.received : 0}₸</TableCell>
+                    <TableCell style={{ color : sale.total - sale.received !== 0 ? 'black' : "red" }}>{sale.total && sale.received ? sale.total - sale.received : 0}₸</TableCell>
                   </TableRow>
                 ))
               ) : (
