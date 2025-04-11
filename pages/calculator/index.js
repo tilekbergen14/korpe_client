@@ -329,7 +329,7 @@ export default function CalculatorPage(props) {
                     variant="outlined"
                     value={received}
                     onChange={(e) => {
-                      e.target.value !== "" && client !== ""
+                      e.target.value !== "" && client !== "" && allTotal >= e.target.value
                         ? setCanSend(true)
                         : setCanSend(false);
                       setReceived(e.target.value);
