@@ -104,6 +104,32 @@ export default function SalesList() {
     return total;
   };
 
+  const onRecieveLeft = async (_id) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    try {
+      const response = await axios.post(
+        `${process.env.server}/sale/received`,
+        { _id },
+        {
+          headers: {
+            authorization: "Bearer " + user.token,
+          },
+        }
+      );
+
+      console.log("HEllo", response)
+      if (response) {
+        // setLoading(false);
+        // setSelectedOrders([]);
+        // router.push("/sales");
+      }
+    } catch (error) {
+      console.error("Error sending orders:", error);
+      // setLoading(false);
+    }
+  };
+
   // Filter sales by date range
   const filteredSales = sales.filter((sale) => {
     const saleDate = new Date(sale.createdAt);
@@ -190,7 +216,7 @@ export default function SalesList() {
                     <TableCell>{sale.total}₸</TableCell>
                     <TableCell>{sale.received ? sale.received : 0}₸</TableCell>
                     <TableCell style={{ color : sale.total - sale.received !== 0 ? 'red' : "black" }}>{sale.total - sale.received}₸</TableCell>
-                    <TableCell><DeleteIcon onClick={() => console.log("Delete")} style={{cursor: "pointer", color: "red"}}/></TableCell>
+                    <TableCell><DeleteIcon onClick={() => onRecieveLeft(sale._id)} style={{cursor: "pointer", color: "red"}}/></TableCell>
                   </TableRow>
                 ))
               ) : (
@@ -353,7 +379,7 @@ export default function SalesList() {
           </Button>
         </DialogActions>
       </Dialog>
-      <div>
+      {/* <div>
         <Button onClick={handleOpen}>Open modal</Button>
         <Modal
             open={open}
@@ -370,7 +396,7 @@ export default function SalesList() {
             </Typography>
             </Box>
         </Modal>
-        </div>
+        </div> */}
     </Box>
   );
 }

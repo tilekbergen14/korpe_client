@@ -87,7 +87,8 @@ export default function SalesList() {
 
   // Filter sales by date range
   const filteredSales = sales.filter((sale) => {
-    const saleDate = new Date(sale.createdAt);
+    let saleDate = new Date(sale.createdAt);
+    saleDate = sale.updatedAt && new Date(sale.updatedAt)
     const start = startDate ? new Date(startDate) : null;
     const end = endDate ? new Date(endDate) : null;
 
@@ -155,7 +156,7 @@ export default function SalesList() {
                   <strong>Қабылданған сумма</strong>
                 </TableCell>
                 <TableCell>
-                  <strong>Қалған сумма</strong>
+                  <strong>Соңғы қабылданған сумма</strong>
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -167,7 +168,7 @@ export default function SalesList() {
                     <TableCell>{formatDate(sale.createdAt)}</TableCell>
                     <TableCell>{sale.total}₸</TableCell>
                     <TableCell>{sale.received ? sale.received : 0}₸</TableCell>
-                    <TableCell style={{ color : sale.total - sale.received !== 0 ? 'red' : "black" }}>{sale.total - sale.received}₸</TableCell>
+                    <TableCell style={{ color : "green" }}>{sale.last_received ? sale.last_received : "0"}₸</TableCell>
                   </TableRow>
                 ))
               ) : (
