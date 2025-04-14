@@ -117,8 +117,6 @@ export default function SalesList() {
           },
         }
       );
-
-      console.log("HEllo", response)
       if (response) {
         // setLoading(false);
         // setSelectedOrders([]);

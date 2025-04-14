@@ -20,10 +20,13 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { format } from "date-fns";
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 export default function SalesList() {
   const [sales, setSales] = useState([]);
   const [sum, setSum] = useState(0);
+  const [user, setUser] = useState(null);
   const [startDate, setStartDate] = useState(""); // Start date for filter
   const [endDate, setEndDate] = useState(""); // End date for filter
   const [selectedSale, setSelectedSale] = useState(null); // Track selected sale for modal
@@ -98,6 +101,13 @@ export default function SalesList() {
   });
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      setUser(user);
+    }
+  }, []);  
+
+  useEffect(() => {
     const newSum = filteredSales.reduce((total, sale) => {
       return total + calculateTotal([sale.received]);
     }, 0);
@@ -108,6 +118,35 @@ export default function SalesList() {
     setSelectedSale(sale);
     setOpenModal(true);
   };
+
+  const onDelete = async (_id) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    try {
+      const response = await axios.delete(
+        `${process.env.server}/sale`,
+        { 
+            params: {
+            _id: _id,
+          }, 
+        },
+        {
+          headers: {
+            authorization: "Bearer " + user.token,
+          },
+        }
+      );
+
+      if (response) {
+        // setLoading(false);
+        // setSelectedOrders([]);
+        // router.push("/sales");
+      }
+    } catch (error) {
+      console.error("Error sending orders:", error);
+      // setLoading(false);
+    }
+  };
+
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -158,17 +197,20 @@ export default function SalesList() {
                 <TableCell>
                   <strong>Соңғы қабылданған сумма</strong>
                 </TableCell>
+                <TableCell>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredSales.length > 0 ? (
                 filteredSales.map((sale, index) => (
-                  <TableRow key={index} onClick={() => handleRowClick(sale)}>
-                    <TableCell>{sale.name}</TableCell>
-                    <TableCell>{formatDate(sale.createdAt)}</TableCell>
-                    <TableCell>{sale.total}₸</TableCell>
-                    <TableCell>{sale.received ? sale.received : 0}₸</TableCell>
+                  <TableRow key={index}>
+                    <TableCell onClick={() => handleRowClick(sale)}>{sale.name}</TableCell>
+                    <TableCell onClick={() => handleRowClick(sale)}>{formatDate(sale.createdAt)}</TableCell>
+                    <TableCell onClick={() => handleRowClick(sale)}>{sale.total}₸</TableCell>
+                    <TableCell onClick={() => handleRowClick(sale)}>{sale.received ? sale.received : 0}₸</TableCell>
                     <TableCell style={{ color : "green" }}>{sale.last_received ? sale.last_received : "0"}₸</TableCell>
+                    {user.role === "admin" && <TableCell><DeleteIcon onClick={(e) => onDelete(sale._id)} style={{cursor: "pointer", color: "red"}}/></TableCell>}
                   </TableRow>
                 ))
               ) : (
