@@ -27,6 +27,10 @@ export default function Home({ posts, questions }) {
       name: "Қаптар",
       link: "/cases",
     },
+    {
+      name: "Дайын тауарлар",
+      link: "/pillows",
+    },
   ]);
   return (
     <div className={styles.homepage} style={{ height: "100%" }}>
