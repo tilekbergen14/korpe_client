@@ -20,8 +20,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { format } from "date-fns";
-import DeleteIcon from '@mui/icons-material/Delete';
-
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function SalesList() {
   const [sales, setSales] = useState([]);
@@ -80,10 +79,11 @@ export default function SalesList() {
   const calculateAll = (sales) => {
     let total = 0;
     sales.forEach((order) => {
-      total += order.case?.price ? order.case?.price : 0 * order.quantity;
-      total += order.material?.price ? order.material?.price : 0 * order.weight;
-      total += order.item?.price ? order.item?.price : 0 * order.length;
+      total += order.case?.price ? order.case?.price : 0;
+      total += order.material?.price ? order.material?.price : 0;
+      total += order.item?.price ? order.item?.price : 0;
       total += order.service?.price ? order.service?.price : 0;
+      total += order.pillow?.price ? order.pillow?.price : 0;
     });
     return total;
   };
@@ -91,7 +91,7 @@ export default function SalesList() {
   // Filter sales by date range
   const filteredSales = sales.filter((sale) => {
     let saleDate = new Date(sale.createdAt);
-    saleDate = sale.updatedAt && new Date(sale.updatedAt)
+    saleDate = sale.updatedAt && new Date(sale.updatedAt);
     const start = startDate ? new Date(startDate) : null;
     const end = endDate ? new Date(endDate) : null;
 
@@ -105,7 +105,7 @@ export default function SalesList() {
     if (user) {
       setUser(user);
     }
-  }, []);  
+  }, []);
 
   useEffect(() => {
     const newSum = filteredSales.reduce((total, sale) => {
@@ -124,10 +124,10 @@ export default function SalesList() {
     try {
       const response = await axios.delete(
         `${process.env.server}/sale`,
-        { 
-            params: {
+        {
+          params: {
             _id: _id,
-          }, 
+          },
         },
         {
           headers: {
@@ -146,7 +146,6 @@ export default function SalesList() {
       // setLoading(false);
     }
   };
-
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -197,20 +196,36 @@ export default function SalesList() {
                 <TableCell>
                   <strong>Соңғы қабылданған сумма</strong>
                 </TableCell>
-                <TableCell>
-                </TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredSales.length > 0 ? (
                 filteredSales.map((sale, index) => (
                   <TableRow key={index}>
-                    <TableCell onClick={() => handleRowClick(sale)}>{sale.name}</TableCell>
-                    <TableCell onClick={() => handleRowClick(sale)}>{formatDate(sale.createdAt)}</TableCell>
-                    <TableCell onClick={() => handleRowClick(sale)}>{sale.total}₸</TableCell>
-                    <TableCell onClick={() => handleRowClick(sale)}>{sale.received ? sale.received : 0}₸</TableCell>
-                    <TableCell style={{ color : "green" }}>{sale.last_received ? sale.last_received : "0"}₸</TableCell>
-                    {user.role === "admin" && <TableCell><DeleteIcon onClick={(e) => onDelete(sale._id)} style={{cursor: "pointer", color: "red"}}/></TableCell>}
+                    <TableCell onClick={() => handleRowClick(sale)}>
+                      {sale.name}
+                    </TableCell>
+                    <TableCell onClick={() => handleRowClick(sale)}>
+                      {formatDate(sale.createdAt)}
+                    </TableCell>
+                    <TableCell onClick={() => handleRowClick(sale)}>
+                      {sale.total}₸
+                    </TableCell>
+                    <TableCell onClick={() => handleRowClick(sale)}>
+                      {sale.received ? sale.received : 0}₸
+                    </TableCell>
+                    <TableCell style={{ color: "green" }}>
+                      {sale.last_received ? sale.last_received : "0"}₸
+                    </TableCell>
+                    {user.role === "admin" && (
+                      <TableCell>
+                        <DeleteIcon
+                          onClick={(e) => onDelete(sale._id)}
+                          style={{ cursor: "pointer", color: "red" }}
+                        />
+                      </TableCell>
+                    )}
                   </TableRow>
                 ))
               ) : (
@@ -281,7 +296,7 @@ export default function SalesList() {
         <DialogTitle>Сатылым туралы мәліметтер</DialogTitle>
         <DialogContent>
           {selectedSale && (
-            <Card sx={{}}>
+            <Card>
               <CardContent>
                 <Box>
                   <div
@@ -296,6 +311,41 @@ export default function SalesList() {
                   </div>
                   {selectedSale.sales.length === 0 ? (
                     <Typography color="textSecondary">Себет бос.</Typography>
+                  ) : selectedSale.readyOrder ? (
+                    <TableContainer component={Paper}>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>
+                              <strong>&#8470;</strong>
+                            </TableCell>
+                            <TableCell>
+                              <strong>Атауы</strong>
+                            </TableCell>
+                            <TableCell>
+                              <strong>Саны</strong>
+                            </TableCell>
+                            <TableCell>
+                              <strong>Бағасы</strong>
+                            </TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {selectedSale.sales.map((order, index) => (
+                            <TableRow key={index}>
+                              <TableCell>{index + 1}</TableCell>
+                              <TableCell>{order.pillow?.name}</TableCell>
+                              <TableCell>{order.quantity}</TableCell>
+                              <TableCell>{order.pillow?.price}</TableCell>
+                            </TableRow>
+                          ))}
+                          {console.log(selectedSale)}
+                        </TableBody>
+                      </Table>
+                      <Typography variant="h6" sx={{ m: 2 }}>
+                        Жиынтық баға: {calculateAll(selectedSale.sales)}₸
+                      </Typography>
+                    </TableContainer>
                   ) : (
                     <TableContainer component={Paper}>
                       <Table>

@@ -67,6 +67,9 @@ export default function Navbar({ profileImg }) {
                   Дайын тауарлар сату
                 </li>
               </Link>
+              <Link href="/debts">
+                <li className={`${styles.link} c-pointer`}>Қарыздар</li>
+              </Link>
               <Link href="/sales">
                 <li className={`${styles.link} c-pointer`}>Сату есебі</li>
               </Link>

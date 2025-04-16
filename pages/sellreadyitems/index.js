@@ -22,46 +22,58 @@ export default function CalculatorPage(props) {
   const [pillowItems, setPillowItems] = useState(props.pillowItems || []);
   const [loading, setLoading] = useState(false);
   const [selectedPillows, setSelectedPillows] = useState([]);
-  const [quantity, setQuantity] = useState(1);
   const [total, setTotal] = useState(0);
   const [allTotal, setAllTotal] = useState(0);
   const [client, setClient] = useState("");
-  const [received, setReceived] = useState(0);
-  const [selectedOrders, setSelectedOrders] = useState([]); // Stores selected orders
+  const [received, setReceived] = useState("");
+  const [selectedOrders, setSelectedOrders] = useState([]);
   const [canSend, setCanSend] = useState(false);
 
   const router = useRouter();
   const today = new Date();
 
-  // Update total calculation whenever the quantity or selected pillow changes
   useEffect(() => {
     const totalPrice = selectedPillows.reduce(
-      (acc, pillow) => acc + pillow.price * quantity,
+      (acc, item) => acc + item.pillow.price * item.quantity,
       0
     );
     setTotal(totalPrice);
-  }, [selectedPillows, quantity]);
+  }, [selectedPillows]);
+
+  const handlePillowClick = (pillow) => {
+    setSelectedPillows((prev) => {
+      const existingIndex = prev.findIndex(
+        (item) => item.pillow._id === pillow._id
+      );
+      if (existingIndex !== -1) {
+        const updated = [...prev];
+        updated[existingIndex].quantity += 1;
+        return updated;
+      } else {
+        return [...prev, { pillow, quantity: 1 }];
+      }
+    });
+  };
+
+  const removeSelectedPillow = (index) => {
+    const updated = [...selectedPillows];
+    updated.splice(index, 1);
+    setSelectedPillows(updated);
+  };
 
   const addToOrders = () => {
     if (selectedPillows.length === 0) return;
 
     const newOrder = {
       pillows: selectedPillows,
-      quantity,
       total,
     };
 
     setAllTotal(allTotal + total);
     setSelectedOrders([...selectedOrders, newOrder]);
 
-    // Reset selections
+    // Reset
     setSelectedPillows([]);
-    setQuantity(1);
-  };
-
-  const removeOrder = (index) => {
-    const updatedOrders = selectedOrders.filter((_, i) => i !== index);
-    setSelectedOrders(updatedOrders);
   };
 
   const sendOrdersToBackend = async () => {
@@ -71,7 +83,13 @@ export default function CalculatorPage(props) {
     try {
       const response = await axios.post(
         `${process.env.server}/sale`,
-        { orders: selectedOrders, client, total: allTotal, received },
+        {
+          orders: selectedPillows,
+          client,
+          total: total,
+          received,
+          readyOrder: true,
+        },
         {
           headers: {
             authorization: "Bearer " + user.token,
@@ -81,18 +99,12 @@ export default function CalculatorPage(props) {
 
       if (response) {
         setLoading(false);
-        // setSelectedOrders([]);
         // router.push("/sales");
       }
     } catch (error) {
       console.error("Error sending orders:", error);
       setLoading(false);
     }
-  };
-
-  const handlePillowClick = (pillow) => {
-    console.log(pillow);
-    setSelectedPillows((prev) => [...prev, pillow]);
   };
 
   return (
@@ -132,6 +144,7 @@ export default function CalculatorPage(props) {
               variant="outlined"
               fullWidth
               sx={{ mb: 2 }}
+              style={{ textAlign: "start" }}
             >
               {item.name} - {item.price}₸
             </Button>
@@ -143,10 +156,32 @@ export default function CalculatorPage(props) {
       <Card sx={{ ml: 2, width: "60%" }}>
         <CardContent>
           <Box ml={4}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography variant="h6" gutterBottom>
-                Клиент: {client}
-              </Typography>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: 16,
+              }}
+            >
+              <div className="flex" style={{ alignItems: "center" }}>
+                <Typography variant="h6" style={{ textAlign: "center" }}>
+                  Клиент:
+                </Typography>
+                <TextField
+                  value={client}
+                  onChange={(e) => {
+                    setClient(e.target.value);
+                    setCanSend(
+                      e.target.value !== "" &&
+                        received !== "" &&
+                        received <= total
+                    );
+                  }}
+                  size="small"
+                  placeholder="Клиент аты"
+                  style={{ marginLeft: 16 }}
+                />
+              </div>
               <Typography variant="h6" gutterBottom>
                 Тапсырыс күні: {today.toISOString().split("T")[0]}
               </Typography>
@@ -155,75 +190,81 @@ export default function CalculatorPage(props) {
             {selectedPillows.length === 0 ? (
               <Typography color="textSecondary">Себет бос.</Typography>
             ) : (
-              <TableContainer component={Paper}>
+              <TableContainer component={Paper} style={{ padding: 16 }}>
                 <Table>
                   <TableHead>
                     <TableRow>
                       <TableCell>
-                        <strong>&#8470;</strong>
+                        <strong>№</strong>
                       </TableCell>
                       <TableCell>
                         <strong>Маталар</strong>
                       </TableCell>
                       <TableCell>
+                        <strong>Саны</strong>
+                      </TableCell>
+                      <TableCell>
                         <strong>Жалпы баға</strong>
+                      </TableCell>
+                      <TableCell>
+                        <strong>Әрекет</strong>
                       </TableCell>
                     </TableRow>
                   </TableHead>
-                  {selectedPillows.map((pillow, index) => (
-                    <TableBody key={index}>
-                      <TableRow>
+                  <TableBody>
+                    {selectedPillows.map((item, index) => (
+                      <TableRow key={index}>
                         <TableCell>{index + 1}</TableCell>
-                        <TableCell>{pillow.name}</TableCell>
+                        <TableCell>{item.pillow.name}</TableCell>
+                        <TableCell>{item.quantity}</TableCell>
+                        <TableCell>
+                          {item.pillow.price * item.quantity}₸
+                        </TableCell>
                         <TableCell>
                           <Button
                             variant="outlined"
                             color="error"
-                            onClick={() => removeOrder(index)}
+                            onClick={() => removeSelectedPillow(index)}
                           >
                             Жою
                           </Button>
                         </TableCell>
                       </TableRow>
-                    </TableBody>
-                  ))}
+                    ))}
+                  </TableBody>
                 </Table>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginTop: "8px",
-                  }}
+
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  mt={2}
+                  alignItems="center"
                 >
-                  <Typography variant="h6" sx={{ m: 2 }}>
-                    Жиынтық баға: {allTotal}₸
-                  </Typography>
+                  <Typography variant="h6">Жиынтық баға: {total}₸</Typography>
                   <TextField
                     label="Қабылданған сумма"
                     variant="outlined"
+                    type="number"
                     value={received}
                     onChange={(e) => {
-                      e.target.value !== "" &&
-                      client !== "" &&
-                      allTotal >= e.target.value
-                        ? setCanSend(true)
-                        : setCanSend(false);
-                      setReceived(e.target.value);
+                      const value = Number(e.target.value);
+                      setReceived(value);
+                      setCanSend(
+                        value !== "" && client !== "" && value <= total
+                      );
                     }}
+                    sx={{ mt: 2 }}
                   />
-                </div>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    onClick={sendOrdersToBackend}
+                    disabled={!canSend}
+                  >
+                    Барлығын жіберу
+                  </Button>
+                </Box>
               </TableContainer>
-            )}
-            {selectedOrders.length > 0 && (
-              <Button
-                variant="contained"
-                color="success"
-                onClick={sendOrdersToBackend}
-                sx={{ mt: 2, width: "100%" }}
-                disabled={!canSend}
-              >
-                Барлығын жіберу
-              </Button>
             )}
           </Box>
         </CardContent>
